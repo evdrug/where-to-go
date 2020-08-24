@@ -15,8 +15,8 @@ class ImageInline(SortableInlineAdminMixin, admin.TabularInline):
 
     def get_images(self, obj):
         url = ''
-        if obj.url:
-            url = f'{settings.MEDIA_URL}{obj.url}'
+        if obj.file_name:
+            url = f'{settings.MEDIA_URL}{obj.file_name}'
         try:
             preview = format_html(
                 '<img src="{url}" width="200" max-height="200" />'.format(

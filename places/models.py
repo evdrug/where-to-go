@@ -17,7 +17,7 @@ class Image(models.Model):
     place = models.ForeignKey(Place, verbose_name='Место',
                               related_name='images',
                               on_delete=models.CASCADE)
-    url = models.ImageField('Фото')
+    file_name = models.ImageField('Фото')
     position = models.IntegerField('Позиция')
 
     def __str__(self):

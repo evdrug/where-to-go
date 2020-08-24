@@ -32,7 +32,7 @@ def index(request):
 
 
 def get_absolute_image_url(img):
-    return f'{settings.MEDIA_URL}{img.url}'
+    return f'{settings.MEDIA_URL}{img.file_name}'
 
 
 def places_json(request, pk):
