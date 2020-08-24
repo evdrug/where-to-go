@@ -31,7 +31,7 @@ class Command(BaseCommand):
                     self.stdout.write(
                         self.style.SUCCESS(
                             f'Add image in place `{place.title}`'))
-                    obj_image.url.save(file_name,
+                    obj_image.file_name.save(file_name,
                                        ContentFile(respone_file.content),
                                        save=True)
 
