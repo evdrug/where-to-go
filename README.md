@@ -63,6 +63,19 @@ python manage.py collectstatic
 ```
 
 
+##Добавляем данные
+
+- ####Панель администратора
+
+    Создаем суперпользователя
+    ```
+    python manage.py createsuperuser
+    ```
+  
+  Заходим в админ панель `https://ваш домен/admin`
+  
+  Добавляем данные `http://ваш домен/admin/places/place/add/`
+
 ## Цели проекта
 
 Код написан в учебных целях — для курса по Python и веб-разработке на сайте [Devman](https://dvmn.org).
