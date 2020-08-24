@@ -65,9 +65,9 @@ python manage.py collectstatic
 ```
 
 
-##Добавляем данные
+## Добавляем данные
 
-####Панель администратора
+- #### Панель администратора
 
     Создаем суперпользователя
     ```
@@ -78,7 +78,7 @@ python manage.py collectstatic
   
   Добавляем данные `http://ваш домен/admin/places/place/add/`
 
-####CLI
+- #### CLI
     ```
   python manage.py load_place http://адрес/файла.json
   ```
