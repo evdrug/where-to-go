@@ -133,7 +133,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     PurePath(BASE_DIR, "static_src"),
-    '/var/www/static',
 ]
 
 MEDIA_URL = '/media/'
