@@ -76,6 +76,10 @@ python manage.py collectstatic
   
   Добавляем данные `http://ваш домен/admin/places/place/add/`
 
+- ####CLI
+    ```
+  python manage.py load_place http://адрес/файла.json
+  ```
 ## Цели проекта
 
 Код написан в учебных целях — для курса по Python и веб-разработке на сайте [Devman](https://dvmn.org).
