@@ -10,30 +10,33 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-import os
-from pathlib import Path, PurePath
+from pathlib import Path
 
-from dotenv import load_dotenv
+from environs import Env
+
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-load_dotenv(PurePath(BASE_DIR, '.env'))
+env.read_env(BASE_DIR / '.env')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'secret_key')
+SECRET_KEY = env('SECRET_KEY', 'secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', False) == 'True'
+DEBUG = env.bool('DEBUG', False)
 
-SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', False) == 'True'
-CSRF_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', False) == 'True'
+SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', False)
+CSRF_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', False)
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    os.getenv('DOMAIN')
+    env('DOMAIN')
 ]
 # Application definition
 
@@ -67,7 +70,7 @@ ROOT_URLCONF = 'where_to_go.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [PurePath(BASE_DIR, 'templates')]
+        'DIRS': [BASE_DIR / 'templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -128,11 +131,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / 'static'
 STATICFILES_DIRS = [
-    PurePath(BASE_DIR, "static_src"),
+    BASE_DIR / "static_src",
 ]
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = PurePath(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"

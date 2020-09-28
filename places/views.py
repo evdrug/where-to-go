@@ -3,10 +3,9 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from places.models import Place
-from where_to_go import settings
 
 
-def generate_point_place(place):
+def generate_place_feature(place):
     return {
         "type": "Feature",
         "geometry": {
@@ -22,24 +21,20 @@ def generate_point_place(place):
 
 
 def index(request):
-    places_db = Place.objects.all()
+    places = Place.objects.all()
     points_places = []
-    for place in places_db:
-        points_places.append(generate_point_place(place))
-    places = {"type": "FeatureCollection",
-              "features": points_places}
-    return render(request, 'places/index.html', {'places': places})
-
-
-def get_absolute_image_url(img):
-    return f'{settings.MEDIA_URL}{img.file_name}'
+    for place in places:
+        points_places.append(generate_place_feature(place))
+    places_features = {"type": "FeatureCollection",
+                       "features": points_places}
+    return render(request, 'places/index.html', {'places': places_features})
 
 
 def places_json(request, pk):
     place = get_object_or_404(Place, pk=pk)
     response_data = {
         "title": place.title,
-        "imgs": [get_absolute_image_url(img) for img in place.images.all()],
+        "imgs": [img.image.url for img in place.images.all()],
         "description_short": place.description_short,
         "description_long": place.description_long,
         "coordinates": {
@@ -47,4 +42,5 @@ def places_json(request, pk):
             "lat": place.lat
         }
     }
-    return JsonResponse(response_data, safe=False)
+    return JsonResponse(response_data, safe=False,
+                        json_dumps_params={'indent': 2, 'ensure_ascii': False})

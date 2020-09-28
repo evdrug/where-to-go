@@ -11,40 +11,43 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('path_json', type=str)
 
-    def created_place(self, data):
-        return Place.objects.get_or_create(
-            title=data['title'],
-            description_short=data['description_short'],
-            description_long=data['description_long'],
-            lng=data['coordinates']['lng'],
-            lat=data['coordinates']['lat'],
-        )
+    def get_stdout_success(self, message):
+        self.stdout.write(self.style.SUCCESS(message))
 
     def add_images(self, images, place):
         for position, url in enumerate(images):
-            with requests.get(url, stream=True) as respone_file:
-                respone_file.raise_for_status()
-                file_name = url.split('/')[-1]
-                obj_image, created_image = Image.objects.get_or_create(
-                    place=place, position=position)
-                if created_image:
-                    self.stdout.write(
-                        self.style.SUCCESS(
-                            f'Add image in place `{place.title}`'))
-                    obj_image.file_name.save(file_name,
-                                       ContentFile(respone_file.content),
-                                       save=True)
+            with requests.get(url, stream=True) as response_file:
+                response_file.raise_for_status()
+                response_content_file = response_file.content
+
+            file_name = url.split('/')[-1]
+            image_obj, image_created = Image.objects.get_or_create(
+                place=place, position=position)
+            if not image_created:
+                continue
+            content_file = ContentFile(response_content_file)
+            image_obj.image.save(file_name, content_file, save=True)
+            self.get_stdout_success(f'Add image in place `{place.title}`')
 
     def handle(self, *args, **options):
         response = requests.get(options['path_json'])
         response.raise_for_status()
-        place_json = response.json()
-        place, created = self.created_place(place_json)
+        raw_place = response.json()
+        place, created = Place.objects.update_or_create(
+            title=raw_place['title'],
+            defaults={
+                "description_short": raw_place['description_short'],
+                "description_long": raw_place['description_long'],
+                "lng": raw_place['coordinates']['lng'],
+                "lat": raw_place['coordinates']['lat'],
+            }
+        )
 
         if created:
-            self.stdout.write(self.style.SUCCESS('Successfully add Place'))
-            self.add_images(place_json['imgs'], place)
-
+            message = ('Successfully added a description for the place '
+                       f'`{place.title}`')
+            self.get_stdout_success(message)
+            self.add_images(raw_place['imgs'], place)
         else:
-            self.stdout.write(self.style.WARNING(
-                f'Place `{place.title}` already exists!'))
+            message = f'updated description place `{place.title}`'
+            self.get_stdout_success(message)
