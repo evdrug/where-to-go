@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('path_json', type=str)
 
-    def get_stdout_success(self, message):
+    def print_stdout_success(self, message):
         self.stdout.write(self.style.SUCCESS(message))
 
     def add_images(self, images, place):
@@ -27,7 +27,7 @@ class Command(BaseCommand):
                 continue
             content_file = ContentFile(response_content_file)
             image_obj.image.save(file_name, content_file, save=True)
-            self.get_stdout_success(f'Add image in place `{place.title}`')
+            self.print_stdout_success(f'Add image in place `{place.title}`')
 
     def handle(self, *args, **options):
         response = requests.get(options['path_json'])
@@ -46,8 +46,8 @@ class Command(BaseCommand):
         if created:
             message = ('Successfully added a description for the place '
                        f'`{place.title}`')
-            self.get_stdout_success(message)
+            self.print_stdout_success(message)
             self.add_images(raw_place['imgs'], place)
         else:
             message = f'updated description place `{place.title}`'
-            self.get_stdout_success(message)
+            self.print_stdout_success(message)
