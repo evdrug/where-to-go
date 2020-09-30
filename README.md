@@ -5,7 +5,7 @@
 
 [Demo site](https://evdrug.pythonanywhere.com/)
 
-![Скриншот](https://github.com/evdrug/where-to-go/raw/master/screen/img123.gif)
+![Скриншот](https://github.com/evdrug/where-to-go/raw/master/screenshot/img123.gif)
 
 ## Запуск локально (ознакомление, разработка)
 
