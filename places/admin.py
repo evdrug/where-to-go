@@ -12,10 +12,11 @@ class ImageInline(SortableInlineAdminMixin, admin.TabularInline):
     readonly_fields = ['get_images']
 
     def get_images(self, image_obj):
-        image_url = image_obj.image.url if image_obj.image else ''
+        if not image_obj.image:
+            return 'Картинка ещё не загружена'
         preview = format_html(
             '<img src="{}" style="max-height: 200px; max-width: 200px;"/>',
-            image_url,
+            image_obj.image.url,
         )
         return preview
 
