@@ -5,7 +5,7 @@ from django.urls import reverse
 from places.models import Place
 
 
-def generate_place_feature(place):
+def serialize_place(place):
     return {
         "type": "Feature",
         "geometry": {
@@ -24,7 +24,7 @@ def index(request):
     places = Place.objects.all()
     points_places = []
     for place in places:
-        points_places.append(generate_place_feature(place))
+        points_places.append(serialize_place(place))
     places_features = {"type": "FeatureCollection",
                        "features": points_places}
     return render(request, 'places/index.html', {'places': places_features})
